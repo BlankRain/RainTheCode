@@ -1,0 +1,194 @@
+小贤：众所周知，无线电广播源于仿生学，科学家通过蝙蝠和海豚的声波，找到了灵感，无独有偶，互联网这一伟大的创举，同样源于仿生学.
+    人们通过研究蜘蛛结网的原理，建立了互联网！为了纪念互联网之父..奈特，第一次见到那只名叫因特的蜘蛛，
+    所以互联网也被称为……因特网，也有人亲切的叫它……因特奈特当今全球，互联网系统共分为四大区域，
+    每一个区域都由一件互联网的本体，通过光缆覆盖信号。这四大区域分别被命名为：格兰芬多，斯莱特林，赫奇帕奇以及拉文克劳～
+
+展博：这里难道没有人看过哈利波特吗！？
+
+以上为开场白~ 来自<<爱情公寓>> .
+
+曾小贤胡诌的鬼话,偏离事实,却不失一个好故事.不过,他还是歪打正着了一个宝贝.蜘蛛.Spider~
+不过,那只蜘蛛不叫奈特,它叫谷歌,互联网里的蜘蛛侠.
+
+蜘蛛也叫爬虫,网络上有很多网页资源,然后这个小蜘蛛就去一个一个拜访,收集到自己家里,整理一下,就是大把的银子.因为它是互联网通啊,谁家有啥它都清楚.
+然后,你有啥不决,就去问它.它见多识广,就能给你方向及答案.这就是谷歌百度这些家伙干的事情.
+当然,它们顺带狠狠的赚了一大笔钱.这些钱大家不要眼红.各个时代有自己的弄潮儿,想要自己去拿.
+
+扯了这么多闲篇,下面来说说这蜘蛛以及它怎么拜访客户的.
+蜘蛛一般情况下是顺着丝爬的.如果你非要跟我抬杠,我无话可说.杠不是重点,重点是这丝.
+在互联网里,这个丝的DNA叫HTTP协议.现实的某根丝就是个TCP连接.而蜘蛛拜访的客户,就是站点.
+一般有头有脸的客户都有个门卫秘书啥的,那个门卫或者秘书一般情况叫nginx.为啥是nginx?活好.
+先说说DNA. HTTP协议是这样的.
+举个例子:
+访问一下三叔的博客:http://www.moye.me/
+
+Request URL:http://www.moye.me/
+Request Method:GET
+Status Code:200 OK
+Remote Address:106.187.47.251:80
+
+Response Headers
+Connection:keep-alive
+Content-Encoding:gzip
+Content-Length:20685
+Content-Type:text/html; charset=UTF-8
+Date:Thu, 09 Feb 2017 08:37:29 GMT
+Link:<http://www.moye.me/wp-json/>; rel="https://api.w.org/"
+Server:nginx/1.6.2
+Vary:Accept-Encoding
+X-Powered-By:PHP/5.3.3
+
+Request Headers
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Encoding:gzip, deflate, sdch
+Accept-Language:zh-CN,zh;q=0.8
+Cache-Control:max-age=0
+Connection:keep-alive
+Host:www.moye.me
+Upgrade-Insecure-Requests:1
+User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
+
+
+是不是看着要懵逼?先挺住,不要倒下,听我说完再懵逼.HTTP是文本协议,啥是文本协议? 就像合同一样,纸上写的,有字的那种,字你是能认出来的.那就是文本协议.
+文本协议好啊,通用.就跟合同一样.有固定套路格式,甲方乙方,甲方权利乙方权利,甲方义务乙方义务,甲方违约处罚,乙方违约处罚.HTTP协议也有个甲方乙方.
+一般,这甲方叫HTTPRequest 乙方叫HTTPResponse.各个语言有些许差异,比如Java里就叫HttpServletRequest和HttpServletResponse.clojure里面ring叫Request和Response.
+忽略这些细节,这些不是重点.名字不同,但是内容是一样的哦.可以看一下这个 https://github.com/ring-clojure/ring/wiki/Concepts 加深一下理解.也可以不看,就此跳过.
+
+亚当斯密老爷子说过,给我我想要的,你也会获得你想要的. 这一个HTTP请求就是一个交易. 甲方带着一些信息来拜访乙方,乙方拿到甲方的信息返回一些响应给甲方.就是这么个样子啦.
+
+来,看看Julia里面是怎么玩的.
+我们用这个包 https://github.com/JuliaWeb/HttpServer.jl
+安装用这个 Pkg.add("HttpServer")
+代码如下:
+using HttpServer
+
+http = HttpHandler() do req::Request, res::Response
+    Response( ismatch(r"^/hello/",req.resource) ? string("Hello ", split(req.resource,'/')[3], "!") : 404 )
+end
+
+server = Server( http )
+run( server, 8000 )
+
+然后访问 http://127.0.0.1:8000/hello/jack
+你会看见个 Hello jack!
+这个一个简单的搭讪..却包含了最基本的技巧.
+关于DNA就说这么多啦.
+
+下面我们来扮演一下蜘蛛侠,看蜘蛛侠是如何做一个盖世英雄的.
+上文我们知道,蜘蛛侠是甲方.
+Julia里面有个甲方库 https://github.com/JuliaWeb/Requests.jl
+安装是这个样子的  Pkg.add("Requests")
+预备是这个样子的
+using Requests
+import Requests: get, post, put, delete, options
+开始飞檐走壁是这个样子的
+get("http://www.moye.me/")
+post("http://www.moye.me/")
+put("http://www.moye.me/")
+delete("http://www.moye.me/")
+options("http://www.moye.me/")
+这个 get post put delete options 是HTTP协议里面的 Method. Method翻译过来叫方法.但它不是真的方法.只是个名字,姓方名法.
+有这么个小约定,成不成文不知道,get 用来查询数据,post 用来新增数据,put 更新数据,delete 删除数据,options我就不知道了.大概是按照有个RESTFULL的武林套路来架构.
+也不是很懂,你可以不管这些约定.毕竟只是约定,不是实际内容,具体内容要根据具体程序来看.
+Julia 里面 body=String(get("http://www.moye.me/").data) 页面内容就拿到了.
+作为一只小蜘蛛,爬了三叔的主页一次. 爬下来的,得保存,整理,分析.
+先说保存, 直接save(get("http://www.moye.me/")) 就保存到当前目录了.
+再说整理分析,嗯~ 这个嘛.分分词,过滤过滤,打个分就好了.说着还是蛮轻松的,做的时候比较头大.哈哈~这个里面有科学,有知识,关键我是个一知半解的样子,就不吹牛了.
+简单的蜘蛛就是这样的.能爬能保存就行.当然,有人会笑了,这也算蜘蛛?都没有调度,没有队列啥的. 我个人觉得,组织一群小蜘蛛去挨家挨户去拜访.这是另一个问题.
+就先这样吧.
+
+DNA和蜘蛛说完,得说说丝.也就是线路了.
+这蜘蛛爬来爬去,虽说空里来雨里去,神龙见首不见尾的.但是,老祖宗说的好啊.
+夫列子御風而行，泠然善也，旬有五日而反。彼於致福者，未數數然也。此雖免乎行，猶有所待者也。若夫乘天地之正，而御六氣之辯，以遊無窮者，彼且惡乎待哉！故曰：至人無己，神人無功，聖人無名。
+祖师爷这么说的,此虽免乎行,犹有所待也.蜘蛛侠也不例外.它需要一件法宝:TCP/IP
+TCP/IP的底层当然是光纤网线交换机无线路由器这些基础物理设施了.
+作为个底层人士,我得说说非底层的东西~引出这章:芸芸众生,一网打尽~
+芸芸众生,一网打尽~
+数学上有个东西叫图论~很好很强大.表示不是很懂.但是有些概念还是很值得思考的.
+点.可看做个体.边,就是两个点有了联系.个体加联系,就构成了图结构.
+有特殊的图,比如树,环,网~
+这次我要说的是网~
+网,闭着眼睛想想,嗯~没错,丝袜的感觉~联系,勾勒,凸显,隐含..
+果真很性感.
+网络这东西早有,但是狭义的网络,也就是互联网,还很年轻,出来没多久.关于它美苏争霸,防核攻击的背景就不提了.
+我给大家来段相声,七个小矮人把信送给加西亚.
+传说有七个大学老师放学后在酒吧里讨论了一下网络通信模型，然后就出了个OSI七层模型.
+内容是这样的.
+OSI中的层 功能 TCP/IP协议族
+应用层 文件传输，电子邮件，文件服务，虚拟终端 TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet
+表示层 数据格式化，代码转换，数据加密 没有协议
+会话层 解除或建立与别的接点的联系 没有协议
+传输层 提供端对端的接口 TCP，UDP
+网络层 为数据包选择路由 IP，ICMP，RIP，OSPF，BGP，IGMP
+数据链路层 传输有地址的帧以及错误检测功能 SLIP，CSLIP，PPP，ARP，RARP，MTU
+物理层 以二进制数据形式在物理媒体上传输数据 ISO2110，IEEE802，IEEE802.2
+
+然后实际呢，用得最多的是TCP/IP五层网络模型.
+先说IP.IP就是你家电脑的门牌号.门牌号这东西,很容易重复.比如查令十字路84号. 为了不要把信送错了.地址得写详细一点.比如某国某省某市某区某街某号某楼某层某室.所以,IP就是这么个东西. 但它不仅仅是这么个东西,比如经常看到的 192.168.0.1 这些是啥玩意?
+哦,我也不清楚,反正有那么几类IP.实际上,简单知道192,172,10这些是内网地址,127.0.0.1是本机就可以了. 其他的东西,要深究,我这里也写不下,另搞本书去看吧.
+
+IP说了,得说端口,比如 http://127.0.0.1:8080其中8080就是端口. 你可以理解为频道,对讲机,在同一个频道上,互相就可以喊话了. 常用软件的默认频道还是需要知道的.这道理跟听广播一样.
+比如http 80,ftp 20,ssh 22 mysql 3306  mssql 1433 redis 6380.总之很多.一般人不改这些配置.
+TCP/IP就不多说了.更多详细内容,自己谷歌搜一下呗.我毕竟不比技术文档专业.
+不过,还是得举个例子吧.
+下面有请Echo 女神出场.
+关于echo女神,目前我的认知里有两位哦.一个是台湾女作家,三毛.她就叫echo.我大概高中还是大一看过她的好多电子书,只是后来基本忘完了.不过搞技术的汉子们可以去看看她的书,
+撩妹必须能用上.撩妹不是重点,重点是她写的真的很好.她与荷西的爱情故事,也是令人神往的.另外,她令撒哈拉如此美丽诱人,华人女性去撒哈拉的,她是第一个吧.不要跟我抬杠,古人不算啊.她有句话我很喜欢,没有科学道理,但是就是喜欢. 原话忘了,大概就是你想我了,就心里默默对我说话,我就知道了. 哈哈..超越时空的脑电波交流. 哦对了,八卦一下,她好像最喜欢贾平凹的文字.贾平凹如黄土,三毛如水,水有水的灵气,土有土的灵气.这是一个灵性对另一个灵性的欣赏吧.
+另一个Echo就是神话里的女神啦. 希腊诸神还是蛮可爱的,希腊是个文化大国.话说我天朝上下五千年,然后就没下文了.也是蛮悲哀的,诸君当自戒共勉.也好再来五千年啊.
+希腊神话中，Echo是个美丽的林间仙子。她天真，活泼，喜欢用她快乐的声音诉说着生活的点点滴滴。Zues觊觎Echo的美丽，没想到这却招来了Hera的嫉妒。
+她恨恨地念下咒语：Echo，让她只能支离破碎地重复别人的话吧！永远永远！ 
+从此，快乐的仙女黯然地游离于森林之间。 森林的另一角，一个翩翩少年正悄悄长成。他，无数的巧合，终于让小Echo遇上了心仪的王子。她看着Narcissus，灼红了双脸。她偷偷地跟着，希望着能够跟他说上一句话。可是，她是被诅咒的！她使劲地撕扯自己的咽喉，却始终说不出一个字。心在煎熬。林中的脚步声惊动了Narcissus，他转身喊出一句：Who is here? Echo欣喜万分，她多想告知Narcissus她的心意，但是她没有正常的说话能力，只能重复念叨着别人的话“here..here..”。对美丽女子的倾慕，Narcissus早已见惯不怪了。对她们，他总是高傲地一笑，无情地拒绝。这次也不例外：I don't love you. Echo含着泪，口中却只能重复着：“love you..love you..”。她渴望说出的句子啊，此时却变成了伤口上的一把盐。 她伤心地在森林徘徊，终日以泪洗脸，身体日渐消瘦。终于有一天，她的身子完全消失了，只剩下忧郁而轻柔的声音在山谷中回荡。无论是何人对她呼喊，她都只重复对方的话语，从不作自己的回答。而那个无情的拒绝者爱上了自己的倒影，郁郁而终，化作了一株自恋的水仙花。
+	~来自百度知道（墙内编程小学生提问聚集地）
+下面,在Julia里面来个Echo服务
+function echo()
+ @async begin
+         server = listen(2001)
+         while true
+           sock = accept(server)
+           @async while isopen(sock)
+			 x=readline(sock)
+			 whatPrinceSay=x[1:length(x)-1]
+             write(sock,"$whatPrinceSay,too\n")
+           end
+         end
+       end
+end
+喏~Echo女神已经就位了.
+下面王子出场.
+function prince()
+	me=connect(2001)
+	@async while true
+          write(STDOUT,readline(me))
+    end
+	me
+end
+喵~ 王子也就位了.
+Ready? Action...
+begin
+	showLove=println
+	echo()
+	me=prince()
+	showLove(me,"I love you")
+end
+然后你会得到个结果
+julia> showLove(me,"I love you")
+
+I love you,too
+julia>
+当然,与人为善，爱护动物.生活是面镜子,你笑它就笑,你哭它就哭.你觉得它是傻瓜,它会告诉你:你是傻瓜.
+比如这样:
+laosijitell=println
+
+julia> laosijitell(me,"you are so silly")
+
+you are so silly,too
+julia>
+
+哈哈,自娱自乐一下.关于奈特及Echo的故事就告一段落吧.
+补充两句, echo 无论linux 还是 windows 命令行里都有这个命令.
+你可以在命令行里直接输入命令,试一试.
+比如：
+linux 里,开个terminal, echo "I love you"
+windows 里,·开始··运行··cmd· echo "I love you"
+Julia里面 run(`echo I love you`)就可以啦.
+`balabala` 用两个` 符号包起来组合的对象叫Cmd对象,专门执行shell命令的. 用run函数就可以调用.很方便哦.

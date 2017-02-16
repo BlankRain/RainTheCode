@@ -1,0 +1,283 @@
+吃瓜群众看了我十篇九阴真经,依然不会写代码.这怎么能行?说出去岂不是要江湖人耻笑.
+老衲就把我的独门功夫HelloWorld七十二绝技传给你们吧。
+1定义字符串
+heng="HelloWorld"
+ha="""
+	hello,
+	world
+	"""
+hei="$heng $ha"
+
+2定义函数
+function heng() "HelloWorld" end
+ha=()->"HelloWorld"
+3定义宏
+macro heng() return "HelloWorld" end
+ha=:("HelloWorld")
+4定义数组
+heng=[1,2,3]
+5定义区间
+ha=1:3
+heng=1:2:9
+6查看帮助
+?helloWorld
+7查看类型
+typeof(helloWorld)
+8定义元组
+heng=("hello","world")
+ha=("he","llo","wo","rld")
+9解构元组
+heng,ha=("hello","world")
+hei=("he","llo","wo","rld")
+hei.:1  hei.:2 hei.:3 
+10 定义字典
+heng=Dict("A"=>1, "B"=>2)
+ha=Dict([("hello","world"),("heisagei","ayoutong")])
+11 取字典值
+heng_dic=Dict("A"=>1, "B"=>2)
+heng=heng_dic["B"]
+12 取字典Key
+heng_dic=Dict("A"=>1, "B"=>2)
+heng=keys(heng_dic)
+13 取字典Value
+heng_dic=Dict("A"=>1, "B"=>2)
+heng=values(heng_dic)
+get(dict, key) do _ end
+14 判断是否有Key
+heng=haskey(heng_dic,key)
+15 定义集合
+heng=Set([1,1,1,1,2,3])
+16 添加元素
+push!(heng,666)
+17 移除元素
+pop!(heng) 移除最后一个元素
+delete!(heng,element) 移除某个元素
+18字符串位置相关
+endof(s) 最后一个字符索引
+length(s) 字符串长度
+nextind(s,i) 下一个有效的索引
+search(s,str) 搜索str在s中的位置,类似于其他语言中的indexof
+
+19 过滤函数
+heng=filter((x)->x>5,1:20)
+20 map函数
+heng=map((x)->x*10,1:20)
+21 reduce函数
+heng=reduce(+,1:20)
+ha=reduce((x,y)->x*y+y,1:20)
+23 for 循环
+for i= 1:100
+	heng="$i times"
+end
+24 while循环
+i=1
+while i<100
+	i=i+1
+	print(i)
+end
+25 if 判断
+heng=if 3+4>5 "haha" else "what?" end
+26 九九乘法表
+for x in 1:9 
+	for y in 1:9
+	print("$x * $y = $(x*y) ")
+	end
+	print("\n")
+end
+第二种写法:
+map(function (x)
+	map((y)->print("$y*$x=$(x*y) "),1:9)
+	print("\n")
+end,1:9)
+
+26 素数判别
+ Pkg.add("Primes")
+ using Primes
+ isprime(5)
+27 100内素数
+using Primes
+primes(100)
+
+28 排序
+heng=sort([9,23,5,7,2])
+
+29 repeat函数
+ repeat([3],inner=3)
+ repeat(1:2, outer=2)
+ ?repeat 看帮助理解inner,outer
+30 无限循环
+heng=cycle([1,0,-1])
+ha=take(heng,20)
+foreach(println,ha)
+
+31 取前N个元素
+take(col,N)
+32 序数词函数
+first 
+last
+nth=getindex(col,n)
+33 当前目录
+pwd() 
+34 读取当前目录
+readdir(pwd())
+35 切换目录
+cd
+36 遍历目录
+for (root, dirs, files) in walkdir(".")
+    println("Directories in $root")
+    for dir in dirs
+        println(joinpath(root, dir)) # path to directories
+    end
+    println("Files in $root")
+    for file in files
+        println(joinpath(root, file)) # path to files
+    end
+end
+
+37创建文件
+heng=mkdir("./heng",0o777)
+38下载文件
+heng=dowload(url,localfilename)
+39 标准流
+STDOUT STDIN STDERR
+40 打开文件流
+heng=open("./test","w+")
+41 从流里读一行
+heng=readline(STDIN)
+filestream=open("./test","w+")
+ha=readline(filestream)
+42 读取所有行
+filestream=open("./test","w+")
+ha=readlines(filestream)
+或者直接 
+hei=readlines("./test")
+43 边读边处理
+for line in eachline("./tests")
+	print(line)
+end
+44 打开个端口
+heng=connect(ip,port)
+46 监听个端口
+server=listen(ip,port)
+47 构造个日期
+ulia> DateTime(2013)
+2013-01-01T00:00:00
+
+julia> DateTime(2013,7)
+2013-07-01T00:00:00
+
+julia> DateTime(2013,7,1)
+2013-07-01T00:00:00
+
+julia> DateTime(2013,7,1,12)
+2013-07-01T12:00:00
+
+julia> DateTime(2013,7,1,12,30)
+2013-07-01T12:30:00
+
+julia> DateTime(2013,7,1,12,30,59)
+2013-07-01T12:30:59
+
+julia> DateTime(2013,7,1,12,30,59,1)
+2013-07-01T12:30:59.001
+
+julia> Date(2013)
+2013-01-01
+
+julia> Date(2013,7)
+2013-07-01
+
+julia> Date(2013,7,1)
+2013-07-01
+
+julia> Date(Dates.Year(2013),Dates.Month(7),Dates.Day(1))
+2013-07-01
+
+julia> Date(Dates.Month(7),Dates.Year(2013))
+2013-07-01
+
+48 格式化日期
+julia> df = Dates.DateFormat("y-m-d");
+
+julia> dt = Date("2015-01-01",df)
+2015-01-01
+
+julia> dt2 = Date("2015-01-02",df)
+2015-01-02
+49 日期比较大小
+julia> dt = Date(2012,2,29)
+2012-02-29
+
+julia> dt2 = Date(2000,2,1)
+2000-02-01
+
+julia> dt > dt2
+true
+
+julia> dt - dt2
+4411 days
+
+49 访问日期年月日
+julia> t = Date(2014,1,31)
+2014-01-31
+
+julia> Dates.year(t)
+2014
+
+julia> Dates.month(t)
+1
+
+julia> Dates.week(t)
+5
+
+julia> Dates.day(t)
+
+50 日期查询操作
+julia> Dates.dayofweek(t)
+5
+
+julia> Dates.dayname(t)
+"Friday"
+
+julia> Dates.dayofweekofmonth(t)
+5  # 5th Friday of January
+julia> Dates.monthname(t)
+"January"
+
+julia> Dates.daysinmonth(t)
+31
+
+51 运行外部程序
+run(`echo 1`)
+
+52 读取外部程序返回结果
+ a=readstring(`echo hello`)
+ 
+ open(`less`, "w", STDOUT) do io
+           for i = 1:3
+               println(io, i)
+           end
+ end
+ 53 注入型Cmd对象
+ julia> file = "/etc/passwd"
+"/etc/passwd"
+
+julia> `sort $file`
+`sort /etc/passwd`
+
+julia> names = ["foo","bar","baz"]
+3-element Array{String,1}:
+ "foo"
+ "bar"
+ "baz"
+
+julia> `grep xylophone $names.txt`
+`grep xylophone foo.txt bar.txt baz.txt`
+
+53 命令管道
+ run(pipeline(`echo hello`, `sort`))
+54 多个命令
+julia> run(`echo hello` & `echo world`)
+
+后十八式,先不告诉你.
+内容有类型模块设计模式及异步编程.

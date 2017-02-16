@@ -1,0 +1,36 @@
+道可道,非常道.名可名,非常名.无名,天地之始也.有名,万物之母
+      --<<道德经>>
+天下文章一大抄,先抄老子一段.
+孩子刚出生,得起个名字. 名字是个符号. 它具有指向性. 指的东西是其外延,本身是其内涵. 我们说"老子",这两个字是其内涵.
+老子其人其语是其外延. 命名就是这么回事. 指与所指建个联系.
+
+下面说说在Julia里面关于命名的那些事.
+有个东西,叫变量 (variable)
+A variable, in Julia, is a name associated (or bound) to a value.
+It’s useful when you want to store a value (that you obtained after some math, for example) for later use.
+For example:
+# Assign the value 10 to the variable x
+julia> x = 10 10
+
+是不是很绕? 其实就说了一句话,你想用一个东西,你先给它起个好名字.
+举个例子: 我想要用数字10,那我给它起个名字ten.
+用代码表达出来就是: ten = 10
+= 是赋值符号,意思就是建立联系. 很形象,两个带带.
+再举个例子:
+ UniversalDeclarationOfHumanRightsStart = "人人生而自由，在尊严和权利上一律平等。"
+ 起名字的时候,是有些禁忌的. 比如在古代,是要避讳的. 代码里要不要避讳? 嗯,也是要的.
+ 在Julia里,系统内建关键字你是要避的. 比如:try else function等.
+ 除了避讳,还有什么要求呢?
+ Variable names must begin with a letter (A-Z or a-z), underscore, or a subset of Unicode code points greater than 00A0
+ 啥意思呢? 一些特殊字符外,其他的全支持.
+常规情况下,变量命名是不会出啥大问题的. 说一些约定习俗吧.
+习俗呢,不是强制规定,但是,如果你知道,而且也遵守它们,只会让你更懂Julia.
+ 1 Names of variables are in lower case.(小写变量名)
+ 2 Word separation can be indicated by underscores (’_’), but use of underscores is discouraged unless the name would be hard to read otherwise.
+ 不建议下划线(‘_’)分隔单词,除非太长.一切以易读为准.
+ 3 Names of Types and Modules begin with a capital letter and word separation is shown with upper camel case instead of underscores
+ 类型或模块,变量命名请大写.单词啥的请驼峰,不要用下划线哦.
+ 4 Names of functions and macros are in lower case, without underscores.
+ 函数和宏名都小写无下划线.
+ 5Functions that write to their arguments have names that end in !. These are sometimes called “mutating” or “in-place”functionsbecausetheyareintendedtoproducechangesintheirargumentsafterthefunctioniscalled, not just return a value.
+ 函数有副作用的,命名时候加"!"符号.

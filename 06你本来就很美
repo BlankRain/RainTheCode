@@ -1,0 +1,107 @@
+免费强插个广告,韩束BB霜,你本来就很美~
+关键点是你本来就很美~
+你不仅本来就很美，而且本来就很棒. 这个秘密要坚信,要比你是社会主义接班人更要坚信.因为自信的人儿会发光.
+说说函数,不是韩束.
+最早接触函数,是在数学上.y=kx+b y=ax^2+bx+c 一元一次，一元二次.单调性啦,函数变换了之类的.
+后来,高数上有函数,它是一种特殊的映射. 程序世界里面的函数和数学上的稍微有点区别.
+In Julia, a function is an object that maps a tuple of argument values to a return value.
+程序里的函数,有参数,返回值. 数学里的函数有定义域,f 映射,这些东西. 抛弃它们的不同点,留下共同点.
+它们都有个最核心的东西,映射.把参数映射成返回值. 这就是程序里的函数. 也是"有名的容器".有名不是著名的意思,是有名字. 这个容器的结构大概是这样的 {函数名：x,参数:y,返回值:z}
+这么个结构. 这个比起数据容器列表或者字典,就更具体且复杂了一点. 但是,它依旧是抽象的. 它达到了某种平衡,所以,它是非常强大的存在.
+不吹这么多了. 说点人话.
+在Julia里面,声明函数是这样的:
+function f(x,y)
+  x + y
+end
+或者 这样：
+f(x,y) = x + y
+
+然后调用函数的时候是这样：
+julia> f(2,3)
+5
+函数名可有可无,有就是具名函数，没有就是匿名函数.
+比如 x-> x+1 
+再比如 function (x) x+1 end
+function ....end 这种lua语法结构,个人挺喜欢. 个人感觉比 function (){....}  这种要舒服.
+
+参数是简单的,但是也可以比较复杂. 比如参数变量和命名参数. 其实参数就是个列表.
+参数变量：
+bar(a,b,x...) = (a,b,x)
+julia> bar(1,2)
+(1,2,())
+
+julia> bar(1,2,3)
+(1,2,(3,))
+
+julia> bar(1,2,3,4)
+(1,2,(3,4))
+
+julia> bar(1,2,3,4,5,6)
+(1,2,(3,4,5,6)
+
+关键字参数
+function plot(x, y; style="solid", width=1, color="black")
+    ###
+end
+可选参数
+function plot(x, y, style="solid", width=1, color="black")
+    ###
+end
+区别就是, 和;
+集中起来是这样的.
+function f(x,y=10; z=0, kwargs...)
+    ###
+end
+
+Julia函数语法就写这么多,更多细节看这个http://docs.julialang.org/en/stable/manual/functions/.
+
+
+
+
+其实定义参数的时候 x... 中...是个集合. 集合就是不确定的.就可以定义多个参数了.
+
+
+
+返回值是一个,但是可以有多个,多个其实也是一个.因为多个就是一个特殊的数据结构.
+比如这样:
+julia> function foo(a,b)
+         a+b, a*b
+       end;
+返回的是这样的
+julia> foo(2,3)
+(5,6)
+数据解构一下是这样:
+julia> x, y = foo(2,3);
+
+操作符都是函数,一些操作语法糖对应的函数
+Operators With Special Names
+A few special expressions correspond to calls to functions with non-obvious names. These are:
+
+Expression	Calls
+[A B C ...]	hcat()
+[A, B, C, ...]	vcat()
+[A B; C D; ...]	hvcat()
+A'	ctranspose()
+A.'	transpose()
+1:n	colon()
+A[i]	getindex()
+A[i]=x	setindex!()
+
+
+关于函数,有个很有趣的东西要讲一下,那就是递归.递归其实没有啥特别的. 在函数里面可以调用函数. 这是一件极普通的事情.
+递归的特殊之处在于,函数内部调用了自己. 这就像一条蛇咬住了自己的尾巴. 自己调用自己需要有个注意事项.那就是自己得对自己足够了解.
+调用的过程中,要有边界有收敛条件,这样函数调用不至于无穷无尽出不来结果. 如果不能向边界收敛, 这个要爆. 当然,有些LISP,或者函数式编程语言,用了lazy eval。然后,
+爆就难爆了。但是,并不代表不能爆. 总之,递归要认真设计.
+
+递归是这样一种姿态. 我的存在就是来证明我自己. 很酷很拽.~ 但是,就是酷拽出一种美.
+这里要手打一个快排算法了. haskell的..so cool
+qsort :: Ord a => [a] -> [a]
+qsort [] = []
+qsort (x:xs) = qsort LT ++ [x] ++ qsort GT
+               where (LT, GT) = partition (< x) xs
+
+作者：葛凯麟
+链接：https://www.zhihu.com/question/21782885/answer/22984827
+来源：知乎
+
+这里面就递归啦.. 声明式算法设计..定义良好,就运行良好. 这是一种认知方式. 程序由概念与定义而组合而成. 而不是指令. 这是质的区别. 虽然有时候函数和指令并不能实际区分开.
