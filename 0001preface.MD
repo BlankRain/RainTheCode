@@ -2,7 +2,7 @@
 
 随后的日子里，从一起参加社区的 MeetUp，到聚会喝酒谈天说地，@blankrain 于吾的特征慢慢清晰了起来：
 
-这是一位细腻的西北技术人，对技术（或者说小众语言）有着良好的品味，这一点从这套[非主流技术丛书](https://github.com/BlankRain/daydayup)可见一斑。
+这是一位细腻的西北技术人，对技术（或者说小众语言）有着良好的品味，这一点从这套[非主流技术丛书](https://github.com/BlankRain/RainTheCode)可见一斑。
 
 另一方面，也不得不感叹，大哥会得东西太多了：从lisp、julia、GO到Clojure，再到开源硬件，再到自己DIY AR手套，数学和地理也有涉猎，不禁暗暗佩服。
 
